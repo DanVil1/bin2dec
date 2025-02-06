@@ -1,4 +1,3 @@
-// src/components/Bin2Dec.js
 import React, { useState } from "react";
 import { BlockMath } from "react-katex";
 
@@ -7,12 +6,11 @@ export default function Bin2Dec() {
   const [error, setError] = useState("");
   const [decimal, setDecimal] = useState("");
 
-  // Convert binary -> decimal (no arrays, single math function Math.pow)
   const convertBinToDec = (binStr) => {
     let total = 0;
     const length = binStr.length;
     for (let i = 0; i < length; i++) {
-      const char = binStr.charAt(i); // '0' or '1'
+      const char = binStr.charAt(i);
       const digit = parseInt(char, 10);
       const power = length - 1 - i;
       total += digit * Math.pow(2, power);
@@ -22,11 +20,9 @@ export default function Bin2Dec() {
 
   const handleBinChange = (e) => {
     const val = e.target.value;
-    // Validate: only allow empty or 0/1
     if (val === "" || /^[01]+$/.test(val)) {
       setBinary(val);
       setError("");
-      // Convert if not empty
       if (val !== "") {
         setDecimal(convertBinToDec(val));
       } else {
@@ -40,10 +36,14 @@ export default function Bin2Dec() {
   return (
     <div style={{ marginTop: "1rem" }}>
       <h2 style={{ textAlign: "center" }}>Binary → Decimal</h2>
-
-      {/* Input Field */}
-      <div>
-        <label htmlFor="binInput">Binary (up to 8 bits): </label>
+      <div
+        style={{
+          margin: "1rem 0",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <input
           id="binInput"
           type="text"
@@ -51,19 +51,23 @@ export default function Bin2Dec() {
           value={binary}
           onChange={handleBinChange}
           placeholder="e.g. 1011"
-          style={{ marginLeft: "0.5rem" }}
+          style={{
+            backgroundColor: "#363636",
+            padding: "0.5rem",
+            borderRadius: "30px",      
+            border: "none",           
+            outline: "none",         
+            width: "150px",             
+            textAlign: "center",
+            color: "#E0E0E0",           
+            boxShadow: "inset 0 0 0 2px rgba(255,255,255,0.2)", 
+          }}
         />
+        <span style={{ margin: "0 0.5rem", fontSize: "1.5rem" }}>→</span>
+        <strong style={{ fontSize: "1.5rem" }}>{decimal}</strong>
       </div>
-
-      {/* Error Message */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Output */}
-      <p style={{ marginTop: "0.5rem" }}>
-        Decimal: <strong>{decimal}</strong>
-      </p>
-
-      {/* Show Step-by-Step Explanation (table + LaTeX) if valid input */}
+  
+      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
       {!error && binary && <BinExplanation binary={binary} />}
     </div>
   );
@@ -73,7 +77,6 @@ function BinExplanation({ binary }) {
   let sum = 0;
   const length = binary.length;
 
-  // Build table rows for each digit's contribution
   const rows = [];
   for (let i = 0; i < length; i++) {
     const digitChar = binary.charAt(i);
@@ -93,13 +96,10 @@ function BinExplanation({ binary }) {
     );
   }
 
-  // Build the LaTeX expression for the sum of each term
-  // e.g. 1×2^3 + 0×2^2 + 1×2^1 + 1×2^0 = 11
   let expression = "";
   for (let i = 0; i < length; i++) {
     const digit = binary.charAt(i);
     const power = length - 1 - i;
-    // Add " + " if not the first term
     if (i > 0) expression += " + ";
     expression += `${digit}\\times 2^{${power}}`;
   }
@@ -107,31 +107,24 @@ function BinExplanation({ binary }) {
 
   return (
     <div style={{ marginTop: "1rem" }}>
-      <h3>Step-by-Step Table</h3>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead>
-          <tr style={{ borderBottom: "1px solid #ccc" }}>
-            <th>Index</th>
-            <th>Digit</th>
-            <th>Power of 2</th>
-            <th>Partial Value</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-        <tfoot>
-          <tr style={{ borderTop: "1px solid #ccc" }}>
-            <td colSpan={3} style={{ fontWeight: "bold" }}>Total</td>
-            <td style={{ fontWeight: "bold" }}>{sum}</td>
-          </tr>
-        </tfoot>
-      </table>
-
       <div style={{ marginTop: "1rem" }}>
         <h4>Math Expression</h4>
         <p style={{ fontStyle: "italic", marginBottom: "0.5rem" }}>
           Each digit is multiplied by 2 raised to the power of its position.
         </p>
-        <BlockMath>{fullLatex}</BlockMath>
+        <div
+          style={{
+            overflowX: "auto",
+            maxWidth: "100%",
+            backgroundColor: "#21282c",
+            padding: "0.5rem",
+            borderRadius: "4px",
+          }}
+        >
+          <BlockMath options={{ strict: "ignore" }}>
+            {fullLatex}
+          </BlockMath>
+        </div>
       </div>
     </div>
   );
