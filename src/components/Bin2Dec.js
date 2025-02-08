@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BlockMath } from "react-katex";
 
 export default function Bin2Dec() {
+  
   const [binary, setBinary] = useState("");
   const [error, setError] = useState("");
   const [decimal, setDecimal] = useState("");
@@ -35,7 +36,7 @@ export default function Bin2Dec() {
 
   return (
     <div style={{ marginTop: "1rem" }}>
-      <h2 style={{ textAlign: "center" }}>Binary → Decimal</h2>
+      <h2 style={{ textAlign: "center" }}>Binary to Decimal</h2>
       <div
         style={{
           margin: "1rem 0",
@@ -47,7 +48,7 @@ export default function Bin2Dec() {
         <input
           id="binInput"
           type="text"
-          maxLength={8}
+          maxLength={32}
           value={binary}
           onChange={handleBinChange}
           placeholder="e.g. 1011"
@@ -74,58 +75,74 @@ export default function Bin2Dec() {
 }
 
 function BinExplanation({ binary }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   let sum = 0;
   const length = binary.length;
-
-  const rows = [];
   for (let i = 0; i < length; i++) {
-    const digitChar = binary.charAt(i);
-    const digit = parseInt(digitChar, 10);
+    const digit = parseInt(binary.charAt(i), 10);
     const power = length - 1 - i;
-    const partial = digit * Math.pow(2, power);
-
-    sum += partial;
-
-    rows.push(
-      <tr key={i} style={{ textAlign: "left" }}>
-        <td>{i}</td>
-        <td>{digit}</td>
-        <td>{`2^${power}`}</td>
-        <td>{partial}</td>
-      </tr>
-    );
+    sum += digit * Math.pow(2, power);
   }
 
-  let expression = "";
+  let fullLatex = "\\begin{array}{r}";
   for (let i = 0; i < length; i++) {
     const digit = binary.charAt(i);
     const power = length - 1 - i;
-    if (i > 0) expression += " + ";
-    expression += `${digit}\\times 2^{${power}}`;
+    fullLatex += `${digit}\\times 2^{${power}} \\\\`;
   }
-  const fullLatex = `${expression} = ${sum}`;
+  fullLatex += "\\hline ";
+  fullLatex += `${sum}`;
+  fullLatex += "\\end{array}";
 
   return (
-    <div style={{ marginTop: "1rem" }}>
-      <div style={{ marginTop: "1rem" }}>
-        <h4>Math Expression</h4>
-        <p style={{ fontStyle: "italic", marginBottom: "0.5rem" }}>
-          Each digit is multiplied by 2 raised to the power of its position.
-        </p>
+    <div style={{ marginTop: "1rem", textAlign: "center" }}>
+      <button
+        title="View Details"
+        className="info-button"
+        onClick={() => setIsDialogOpen(true)}
+      >
+        ?
+      </button>
+
+      {isDialogOpen && (
         <div
-          style={{
-            overflowX: "auto",
-            maxWidth: "100%",
-            backgroundColor: "#21282c",
-            padding: "0.5rem",
-            borderRadius: "4px",
-          }}
+          className="dialog-overlay"
+          onClick={() => setIsDialogOpen(false)}
         >
-          <BlockMath options={{ strict: "ignore" }}>
-            {fullLatex}
-          </BlockMath>
+          <div
+            className="dialog-content"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: "800px", width: "90%" }}
+          >
+            <button
+              className="close-dialog"
+              onClick={() => setIsDialogOpen(false)}
+            >
+              X
+            </button>
+            <div style={{ marginTop: "1rem" }}>
+              <h4>Math Expression</h4>
+              <p style={{ fontStyle: "italic", marginBottom: "0.5rem" }}>
+                Each digit is multiplied by 2 raised to the power of its position.
+              </p>
+              <div
+                style={{
+                  overflowX: "auto",
+                  maxWidth: "100%",
+                  backgroundColor: "#21282c",
+                  padding: "0.5rem",
+                  borderRadius: "4px",
+                }}
+              >
+                <BlockMath options={{ strict: "ignore" }}>
+                  {fullLatex}
+                </BlockMath>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

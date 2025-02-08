@@ -1,7 +1,86 @@
 import React, { useState } from "react";
 import { BlockMath } from "react-katex";
 
+function DecExplanation({ decimalStr }) {
+  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const decVal = parseInt(decimalStr, 10);
+
+  let n = decVal;
+  const stepDetails = [];
+
+  while (n > 0) {
+    const quotient = Math.floor(n / 2);
+    const remainder = n % 2;
+    stepDetails.push(
+      `${n} \\div 2 = ${quotient}, \\text{remainder } ${remainder}`
+    );
+    n = quotient;
+  }
+
+  if (decVal === 0) {
+    stepDetails.push(`0 \\div 2 = 0, \\text{remainder } 0`);
+  }
+
+  const stepsLatex = 
+    `\\begin{aligned}
+    ${stepDetails.join(" \\\\ ")}
+    \\end{aligned}`;
+  
+  return (
+    <div style={{ marginTop: "1rem", textAlign: "center" }}>
+      <button
+        title="View Details"
+        className="info-button"
+        onClick={() => setIsDialogOpen(true)}
+      >
+        ?
+      </button>
+
+      {isDialogOpen && (
+        <div
+          className="dialog-overlay"
+          onClick={() => setIsDialogOpen(false)}
+        >
+          <div
+            className="dialog-content"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: "800px", width: "90%" }}
+          >
+            <button
+              className="close-dialog"
+              onClick={() => setIsDialogOpen(false)}
+            >
+              X
+            </button>
+            <div style={{ marginTop: "1rem" }}>
+              <h4>Math Expression</h4>
+              <p style={{ fontStyle: "italic", marginBottom: "0.5rem" }}>
+                We repeatedly divide by 2 and take the remainders:
+              </p>
+              <div
+                style={{
+                  overflowX: "auto",
+                  maxWidth: "100%",
+                  backgroundColor: "#21282c",
+                  padding: "0.5rem",
+                  borderRadius: "4px",
+                }}
+              >
+                <BlockMath options={{ strict: "ignore" }}>
+                  {stepsLatex}
+                </BlockMath>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function Dec2Bin() {
+  
   const [decimal, setDecimal] = useState("");
   const [error, setError] = useState("");
   const [binary, setBinary] = useState("");
@@ -48,7 +127,7 @@ export default function Dec2Bin() {
 
   return (
     <div style={{ marginTop: "1rem" }}>
-      <h2 style={{ textAlign: "center" }}>Decimal → Binary</h2>
+      <h2 style={{ textAlign: "center" }}>Decimal to Binary</h2>
       <div style={{ marginTop: "1rem", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <input
           id="decInput"
@@ -74,68 +153,7 @@ export default function Dec2Bin() {
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
       {!error && decimal && <DecExplanation decimalStr={decimal} binary={binary} />}
     </div>
-
   );
-}
+};
 
-function DecExplanation({ decimalStr, binary }) {
-  const decVal = parseInt(decimalStr, 10);
 
-  let n = decVal;
-  let stepIndex = 1;
-  const rows = [];
-  const stepDetails = [];
-
-  while (n > 0) {
-    const quotient = Math.floor(n / 2);
-    const remainder = n % 2;
-
-    stepDetails.push(`${n} \\div 2 = ${quotient}, \\text{remainder } ${remainder}`);
-
-    rows.push(
-      <tr key={stepIndex}>
-        <td>{stepIndex}</td>
-        <td>{n}</td>
-        <td>{quotient}</td>
-        <td>{remainder}</td>
-      </tr>
-    );
-
-    n = quotient;
-    stepIndex++;
-  }
-
-  if (decVal === 0) {
-    stepDetails.push(`0 \\div 2 = 0, \\text{remainder } 0`);
-    rows.push(
-      <tr key="0">
-        <td>1</td>
-        <td>0</td>
-        <td>0</td>
-        <td>0</td>
-      </tr>
-    );
-  }
-
-  const stepsLatex = stepDetails.join("\\\\");
-
-  return (
-    <div style={{ marginTop: "1rem" }}>
-  <h4>Math Expression</h4>
-  <p style={{ fontStyle: "italic", marginBottom: "0.5rem" }}>
-    We repeatedly divide by 2 and take the remainders:
-  </p>
-  <div
-    style={{
-      overflowX: "auto",
-      maxWidth: "100%",
-      backgroundColor: "#21282c",
-      padding: "0.5rem",
-      borderRadius: "4px",
-    }}
-  >
-    <BlockMath options={{ strict: "ignore" }}>{stepsLatex}</BlockMath>
-  </div>
-</div>
-  );
-}

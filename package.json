@@ -1,14 +1,16 @@
 {
   "name": "bin2dec",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "cra-template": "1.2.0",
+    "framer-motion": "^12.4.1",
     "katex": "^0.16.21",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0",
     "react-katex": "^3.0.1",
-    "react-scripts": "5.0.1"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
