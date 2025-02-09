@@ -3,8 +3,8 @@ import "./App.css";
 import { motion, AnimatePresence } from "framer-motion";
 
 import "katex/dist/katex.min.css";
-import Bin2Dec from "./components/Bin2Dec";
-import Dec2Bin from "./components/Dec2Bin";
+import Bin2Dec from "./components/Bin2Dec/Bin2Dec";
+import Dec2Bin from "./components/Dec2Bin/Dec2Bin";
 
 import { MdAutorenew } from "react-icons/md";
 

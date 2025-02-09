@@ -54,7 +54,6 @@ body {
   opacity: 0.9;
 }
 
-
 .flip-container {
   width: 100%;
   margin: 0 auto;
@@ -67,24 +66,22 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Info button styles */
 .info-button {
   background-color: #ffffff;
-  color: #000000;            /* White text */
+  color: #000000;            
   border: none;
-  border-radius: 50%;        /* Circular shape */
-  width: 60px;               /* Increased size */
+  border-radius: 50%;     
+  width: 60px;               
   height: 60px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;         /* Larger font for the "?" */
+  font-size: 1.5rem;         
   line-height: 0;
   cursor: pointer;
-  margin: 0 auto;            /* Centers the button within its container */
+  margin: 0 auto;          
 }
 
-/* Modal dialog overlay */
 .dialog-overlay {
   position: fixed;
   top: 0;
@@ -107,7 +104,6 @@ body {
   position: relative;
 }
 
-/* Close button for the dialog */
 .close-dialog {
   position: absolute;
   top: 10px;
