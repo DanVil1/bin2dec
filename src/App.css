@@ -13,11 +13,13 @@ body {
   font-family: sans-serif; 
   color: var(--text-primary);
   min-height: 100vh;
+  overflow: hidden;
+
 }
 
 .app-background {
   background-color: var(--page-background); 
-  min-height: 100vh;    
+  height: 100vh;
   display: flex;     
   justify-content: center;
   align-items: center;    
